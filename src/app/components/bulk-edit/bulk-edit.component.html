@@ -1,0 +1,174 @@
+<div
+  *ngIf="!data.employees || data.employees.length === 0; else edit"
+  class="empty"
+>
+  SELECTION EMPTY
+  <button mat-raised-button mat-dialog-close color="primary" tabindex="0">
+    Close
+  </button>
+</div>
+
+<ng-template #edit>
+  <form
+    [formGroup]="forma"
+    (ngSubmit)="onSubmit()"
+    (keydown.enter)="$event.preventDefault()"
+  >
+    <h1 class="title" mat-dialog-title>
+      Bulk edit
+      <div>
+        <button
+          type="button"
+          mat-fab
+          color="accent"
+          class="mat-elevation-z8"
+          (click)="test1()"
+        ></button>
+        <button
+          type="button"
+          mat-fab
+          color="warn"
+          class="mat-elevation-z8"
+          (click)="test2()"
+        ></button>
+        <button
+          type="button"
+          mat-fab
+          color="primary"
+          class="mat-elevation-z8"
+          (click)="test3()"
+        ></button>
+      </div>
+    </h1>
+    <mat-dialog-content>
+      <ng-container
+        *ngFor="let emp of employeesFormArray.controls; let i = index"
+        formArrayName="employeesFormArray"
+      >
+        <div class="employeeWrapper mat-elevation-z8" [formGroupName]="i">
+          <div class="cardTitle">
+            <span>{{ i + 1 }}.&nbsp; Employee</span>
+            <span>total shifts: {{ dataSource[i].shifts.length }}</span>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <label class="control-label">Name:</label>
+              <input formControlName="name" />
+            </div>
+
+            <div class="field">
+              <label class="control-label">Hourly rate:</label>
+              <input formControlName="hourlyRate" />
+            </div>
+
+            <div class="field">
+              <label class="control-label">Overtime hourly rate:</label>
+              <input formControlName="overtimeHourlyRate" />
+            </div>
+          </div>
+
+          <div [hidden]="dataSource[i].shifts.length > 0" class="noShiftsInfo">
+            Shift list empty
+          </div>
+
+          <div class="table-container">
+            <table
+              [hidden]="dataSource[i].shifts.length === 0"
+              mat-table
+              [dataSource]="dataSource[i].shifts"
+              class="mat-elevation-z8"
+              formArrayName="shifts"
+            >
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let row; let i = index">
+                  <span *ngIf="row.isInSameDay(); else notSame">
+                    {{ row.clockIn | date: "dd.MM.yyyy" }}</span
+                  >
+                  <ng-template #notSame>
+                    {{ row.clockIn | date: "dd.MM.yyyy" }} -
+                    {{ row.clockOut | date: "dd.MM.yyyy" }}</ng-template
+                  >
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="clockIn">
+                <th mat-header-cell *matHeaderCellDef>Clock in</th>
+                <td
+                  mat-cell
+                  *matCellDef="let row; let i = index"
+                  [formGroupName]="i"
+                >
+                  <input
+                    class="timePicker"
+                    [format]="24"
+                    [ngxTimepicker]="pickerIn"
+                    formControlName="clockInTime"
+                    (ngModelChange)="onChange($event, row.clockIn)"
+                  />
+                  <ngx-material-timepicker
+                    [hoursOnly]="true"
+                    #pickerIn
+                  ></ngx-material-timepicker>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="clockOut">
+                <th mat-header-cell *matHeaderCellDef>Clock out</th>
+                <td
+                  mat-cell
+                  *matCellDef="let row; let i = index"
+                  [formGroupName]="i"
+                >
+                  <input
+                    class="timePicker"
+                    [format]="24"
+                    [ngxTimepicker]="pickerOut"
+                    formControlName="clockOutTime"
+                    (ngModelChange)="onChange($event, row.clockOut)"
+                  />
+                  <ngx-material-timepicker
+                    [hoursOnly]="true"
+                    #pickerOut
+                  ></ngx-material-timepicker>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="total">
+                <th mat-header-cell *matHeaderCellDef>Total time</th>
+                <td
+                  mat-cell
+                  *matCellDef="let row; let i = index"
+                  [ngStyle]="{
+                    fontSize: getTotal(row) > 8 ? '1.1rem' : ''
+                  }"
+                >
+                  {{ getTotal(row) }} h
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                [ngStyle]="{
+                  backgroundImage: row.isInSameDay()
+                    ? 'white'
+                    : 'linear-gradient(90deg, white, #683ab742)'
+                }"
+              ></tr>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="center">
+      <div class="btn-toolbar">
+        <button mat-raised-button color="primary">Save</button>
+        <button mat-raised-button mat-dialog-close tabindex="0">Cancel</button>
+      </div>
+    </mat-dialog-actions>
+  </form>
+</ng-template>

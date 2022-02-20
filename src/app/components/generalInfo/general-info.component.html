@@ -1,0 +1,8 @@
+<div class="wrapper">
+  <div *ngFor="let field of generalSection">
+    {{ field.name }}
+    <span style="font-weight: 'bold'">
+      {{ field.obs | async }} {{ field.suffix }}</span
+    >
+  </div>
+</div>

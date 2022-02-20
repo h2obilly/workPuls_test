@@ -1,0 +1,85 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  button{
+    margin-left: 6px;
+  }
+}
+
+.employeeWrapper {
+  margin-bottom: 20px;
+  padding: 16px;
+}
+
+.fields {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+  flex-wrap: wrap;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0 10px;
+  }
+
+  label {
+    margin-bottom: 8px;
+  }
+}
+
+table {
+  width: 100%;
+
+
+  th,
+  td {
+    text-align: center;
+  }
+}
+
+.table-container {
+  position: relative;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.timePicker {
+  max-width: 55px;
+  font-size: 1.1rem;
+}
+
+.empty {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  button {
+    width: auto;
+    margin: 20px;
+  }
+}
+
+.noShiftsInfo {
+  width: 100%;
+  text-align: center;
+  background-image: linear-gradient(to right, white, #673ab7, #673ab7, white);
+  padding: 20px;
+  font-size: 1.3rem;
+  color: white;
+}
+
+.cardTitle{
+  display: flex; 
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.datepick{
+  display:flex;
+  justify-content: flex-end;
+}
